@@ -8,15 +8,15 @@ import (
 
 type Post struct {
 	gorm.Model
-	Hypertext     string
-	Title         string
-	Summary       string
-	HeaderImage   string
-	ViewCount     uint64
-	AllowComments bool
-	Active        bool
-	Comments      []Comment
-	Tags          []Tag `gorm:"many2many:post_tags;"`
+	Hypertext     string    `json:"hypertext"`
+	Title         string    `json:"title"`
+	Summary       string    `json:"summary"`
+	HeaderImage   string    `json:"headerImage"`
+	ViewCount     uint64    `json:"viewCount"`
+	AllowComments bool      `json:"allowComments"`
+	Active        bool      `json:"active"`
+	Comments      []Comment `json:"comments"`
+	Tags          []Tag     `json:"tags" gorm:"many2many:post_tags;"`
 }
 
 type PostRepository interface {
