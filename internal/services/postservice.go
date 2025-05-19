@@ -32,6 +32,15 @@ func (ps *postServiceImpl) Get(ctx context.Context, id uint) (core.Post, error) 
 	return p, nil
 }
 
+func (ps *postServiceImpl) GetByTag(ctx context.Context, tagID uint) (p []core.Post, err error) {
+	p, err = ps.repo.GetByTag(ctx, tagID)
+	if err != nil {
+		return p, err
+	}
+
+	return p, nil
+}
+
 func (ps *postServiceImpl) Create(ctx context.Context, input core.PostInput) (core.Post, error) {
 	p := input.ToPost()
 	if err := ps.repo.Create(ctx, &p); err != nil {

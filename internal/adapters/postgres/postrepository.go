@@ -35,6 +35,19 @@ func (pr *postRepositoryImpl) Get(ctx context.Context, id uint) (core.Post, erro
 	return p, nil
 }
 
+func (pr *postRepositoryImpl) GetByTag(ctx context.Context, tagID uint) (p []core.Post, err error) {
+	tx := pr.db.WithContext(ctx)
+	if err = tx.
+		Joins("JOIN post_tags ON post_tags.post_id = posts.id").
+		Where("post_tags.tag_id = ? ", tagID).
+		Preload("Tags").
+		Find(&p).Error; err != nil {
+		return p, err
+	}
+
+	return p, nil
+}
+
 func (pr *postRepositoryImpl) Create(ctx context.Context, p *core.Post) error {
 	tx := pr.db.WithContext(ctx)
 	if err := tx.Create(&p).Error; err != nil {

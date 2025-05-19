@@ -12,7 +12,8 @@ import (
 )
 
 var (
-	ErrIdIsRequired = errors.New("id is required")
+	ErrIdIsRequired    = errors.New("id is required")
+	ErrTagIdIsRequired = errors.New("tag id is required")
 )
 
 type PostHandler struct {
@@ -59,6 +60,28 @@ func (ph *PostHandler) Get(w http.ResponseWriter, r *http.Request) {
 	}
 
 	response.Send(w, http.StatusOK, post)
+}
+
+func (ph *PostHandler) GetByTag(w http.ResponseWriter, r *http.Request) {
+	idPath := r.PathValue("id")
+	if idPath == "" {
+		response.Send(w, http.StatusInternalServerError, ErrTagIdIsRequired)
+		return
+	}
+
+	tagID, err := strconv.ParseUint(idPath, 10, 64)
+	if err != nil {
+		response.Send(w, http.StatusInternalServerError, err)
+		return
+	}
+
+	p, err := ph.serv.GetByTag(r.Context(), uint(tagID))
+	if err != nil {
+		response.Send(w, http.StatusInternalServerError, err)
+		return
+	}
+
+	response.Send(w, http.StatusOK, p)
 }
 
 func (ph *PostHandler) Create(w http.ResponseWriter, r *http.Request) {

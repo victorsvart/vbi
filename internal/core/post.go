@@ -8,19 +8,21 @@ import (
 
 type Post struct {
 	gorm.Model
-	hypertext     string
-	title         string
-	subtitle      string
-	headerImage   string
-	viewCount     uint64
-	allowComments bool
-	active        bool
+	Hypertext     string
+	Title         string
+	Summary       string
+	HeaderImage   string
+	ViewCount     uint64
+	AllowComments bool
+	Active        bool
 	Comments      []Comment
+	Tags          []Tag `gorm:"many2many:post_tags;"`
 }
 
 type PostRepository interface {
 	GetAll(context.Context) ([]Post, error)
 	Get(context.Context, uint) (Post, error)
+	GetByTag(context.Context, uint) (p []Post, err error)
 	Create(context.Context, *Post) error
 	Update(context.Context, *Post) error
 }
@@ -28,6 +30,7 @@ type PostRepository interface {
 type PostService interface {
 	GetAll(context.Context) ([]Post, error)
 	Get(context.Context, uint) (Post, error)
+	GetByTag(context.Context, uint) (p []Post, err error)
 	Create(context.Context, PostInput) (Post, error)
 	Update(context.Context, PostInput) (Post, error)
 }
@@ -36,7 +39,7 @@ type PostInput struct {
 	ID          *uint  `json:"id"`
 	Hypertext   string `json:"hypertext"`
 	Title       string `json:"title"`
-	Subtitle    string `json:"subtitle"`
+	Summary     string `json:"summary"`
 	HeaderImage string `json:"headerImage"`
 }
 
@@ -48,10 +51,10 @@ func (pi PostInput) ToPost() Post {
 
 	post := Post{
 		Model:       gorm.Model{ID: id},
-		hypertext:   pi.Hypertext,
-		title:       pi.Title,
-		subtitle:    pi.Subtitle,
-		headerImage: pi.HeaderImage,
+		Hypertext:   pi.Hypertext,
+		Title:       pi.Title,
+		Summary:     pi.Summary,
+		HeaderImage: pi.HeaderImage,
 	}
 
 	return post
@@ -59,25 +62,25 @@ func (pi PostInput) ToPost() Post {
 
 func NewPost(i PostInput) Post {
 	return Post{
-		hypertext:   i.Hypertext,
-		title:       i.Title,
-		subtitle:    i.Subtitle,
-		headerImage: i.HeaderImage,
+		Hypertext:   i.Hypertext,
+		Title:       i.Title,
+		Summary:     i.Summary,
+		HeaderImage: i.HeaderImage,
 	}
 }
 
 func (p *Post) SetActive() {
-	p.active = true
+	p.Active = true
 }
 
 func (p *Post) SetUnactive() {
-	p.active = true
+	p.Active = true
 }
 
-func (p *Post) AllowComments() {
-	p.allowComments = true
+func (p *Post) EnableComments() {
+	p.AllowComments = true
 }
 
 func (p *Post) BlockComments() {
-	p.allowComments = false
+	p.AllowComments = false
 }
