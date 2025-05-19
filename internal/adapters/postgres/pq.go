@@ -5,6 +5,7 @@ import (
 	"os"
 	"time"
 
+	"github.com/victorsvart/vbi/internal/core"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
@@ -48,5 +49,10 @@ func Connect() *gorm.DB {
 		db.Config.Logger = newLogger
 	}()
 
+	autoMigrate(db)
 	return db
+}
+
+func autoMigrate(db *gorm.DB) {
+	db.Debug().AutoMigrate(&core.Comment{}, &core.Post{})
 }

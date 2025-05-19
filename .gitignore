@@ -40,3 +40,6 @@ gen/
 .env
 .env.*
 
+# Ignore tmp/main
+tmp/main
+

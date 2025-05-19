@@ -3,22 +3,14 @@ package services
 import (
 	"context"
 
-	"github.com/victorsvart/vbi/internal/adapters/postgres"
 	"github.com/victorsvart/vbi/internal/core"
 )
 
-type PostService interface {
-	GetAll(context.Context) ([]core.Post, error)
-	Get(context.Context, uint) (core.Post, error)
-	Create(context.Context, core.PostInput) (core.Post, error)
-	Update(context.Context, core.PostInput) (core.Post, error)
-}
-
 type postServiceImpl struct {
-	repo postgres.PostRepository
+	repo core.PostRepository
 }
 
-func NewPostService(repo postgres.PostRepository) PostService {
+func NewPostService(repo core.PostRepository) core.PostService {
 	return &postServiceImpl{repo}
 }
 

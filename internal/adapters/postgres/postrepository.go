@@ -7,18 +7,11 @@ import (
 	"gorm.io/gorm"
 )
 
-type PostRepository interface {
-	GetAll(context.Context) ([]core.Post, error)
-	Get(context.Context, uint) (core.Post, error)
-	Create(context.Context, *core.Post) error
-	Update(context.Context, *core.Post) error
-}
-
 type postRepositoryImpl struct {
 	db *gorm.DB
 }
 
-func NewPostRepository(db *gorm.DB) PostRepository {
+func NewPostRepository(db *gorm.DB) core.PostRepository {
 	return &postRepositoryImpl{db}
 }
 

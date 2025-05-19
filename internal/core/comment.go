@@ -7,7 +7,7 @@ type Comment struct {
 	commenter string
 	message   string
 	active    bool
-	postID    uint
+	PostID    uint
 }
 
 type CommentInput struct {

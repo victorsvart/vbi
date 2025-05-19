@@ -11,6 +11,7 @@ import (
 	"github.com/go-chi/cors"
 	"github.com/victorsvart/vbi/internal/adapters/endpoints"
 	"github.com/victorsvart/vbi/internal/adapters/postgres"
+	"github.com/victorsvart/vbi/internal/core"
 	"github.com/victorsvart/vbi/internal/services"
 	"gorm.io/gorm"
 )
@@ -68,7 +69,7 @@ func WireApp() chi.Router {
 	return api
 }
 
-func postWire(chi chi.Router, db *gorm.DB) services.PostService {
+func postWire(chi chi.Router, db *gorm.DB) core.PostService {
 	repo := postgres.NewPostRepository(db)
 	services := services.NewPostService(repo)
 	endpoints.NewPostHandler(chi, services)

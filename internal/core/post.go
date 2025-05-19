@@ -1,6 +1,10 @@
 package core
 
-import "gorm.io/gorm"
+import (
+	"context"
+
+	"gorm.io/gorm"
+)
 
 type Post struct {
 	gorm.Model
@@ -12,6 +16,20 @@ type Post struct {
 	allowComments bool
 	active        bool
 	Comments      []Comment
+}
+
+type PostRepository interface {
+	GetAll(context.Context) ([]Post, error)
+	Get(context.Context, uint) (Post, error)
+	Create(context.Context, *Post) error
+	Update(context.Context, *Post) error
+}
+
+type PostService interface {
+	GetAll(context.Context) ([]Post, error)
+	Get(context.Context, uint) (Post, error)
+	Create(context.Context, PostInput) (Post, error)
+	Update(context.Context, PostInput) (Post, error)
 }
 
 type PostInput struct {

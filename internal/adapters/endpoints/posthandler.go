@@ -8,7 +8,6 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/victorsvart/vbi/internal/core"
-	"github.com/victorsvart/vbi/internal/services"
 	"github.com/victorsvart/vbi/pkg/response"
 )
 
@@ -17,10 +16,10 @@ var (
 )
 
 type PostHandler struct {
-	serv services.PostService
+	serv core.PostService
 }
 
-func NewPostHandler(api chi.Router, serv services.PostService) {
+func NewPostHandler(api chi.Router, serv core.PostService) {
 	handler := PostHandler{serv}
 	api.Route("/post", func(r chi.Router) {
 		r.Get("/", handler.GetAll)
