@@ -8,7 +8,7 @@ import (
 
 type Tag struct {
 	gorm.Model
-	Name string
+	Name string `json:"name"`
 }
 
 type TagInput struct {

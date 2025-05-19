@@ -1,8 +1,10 @@
 package postgres
 
 import (
+	"encoding/json"
 	"log"
 	"os"
+	"path/filepath"
 	"time"
 
 	"github.com/victorsvart/vbi/internal/core"
@@ -50,9 +52,58 @@ func Connect() *gorm.DB {
 	}()
 
 	autoMigrate(db)
+	wd, err := os.Getwd()
+	if err != nil {
+		log.Fatalf("error fetching wd: %v", err)
+	}
+	jsonPath := filepath.Join(wd, "internal", "adapters", "postgres", "seeds")
+	initDb(db, jsonPath)
 	return db
 }
 
 func autoMigrate(db *gorm.DB) {
 	db.Debug().AutoMigrate(&core.Comment{}, &core.Post{})
+}
+
+func initDb(db *gorm.DB, jsonPath string) {
+	seedTags(db, filepath.Join(jsonPath, "tags.json"))
+	seedPosts(db, filepath.Join(jsonPath, "posts.json"))
+}
+
+func seedTags(db *gorm.DB, tagPath string) {
+	file, err := os.Open(tagPath)
+	if err != nil {
+		log.Fatalf("error opening tag's seed file: %v", err)
+	}
+	defer file.Close()
+
+	var tags []core.Tag
+	if err := json.NewDecoder(file).Decode(&tags); err != nil {
+		log.Fatalf("error decoding JSON: %v", err)
+	}
+
+	if err := db.CreateInBatches(tags, 5).Error; err != nil {
+		log.Fatalf("error saving tags to db: %v", err)
+	}
+
+	log.Println("Tags seeded!")
+}
+
+func seedPosts(db *gorm.DB, postPath string) {
+	file, err := os.Open(postPath)
+	if err != nil {
+		log.Fatalf("error opening post's seed file: %v", err)
+	}
+	defer file.Close()
+
+	var posts []core.Post
+	if err := json.NewDecoder(file).Decode(&posts); err != nil {
+		log.Fatalf("error decoding JSON: %v", err)
+	}
+
+	if err := db.CreateInBatches(posts, 5).Error; err != nil {
+		log.Fatalf("error saving posts to db: %v", err)
+	}
+
+	log.Println("Posts seeded!")
 }

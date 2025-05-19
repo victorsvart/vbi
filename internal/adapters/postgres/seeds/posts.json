@@ -1,0 +1,47 @@
+[
+  {
+    "hypertext": "getting-started-with-go",
+    "title": "Getting Started with Go",
+    "summary": "A beginner's guide to the Go programming language.",
+    "headerImage": "https://example.com/images/go-intro.png",
+    "viewCount": 0,
+    "allowComments": true,
+    "active": true,
+    "tags": [
+      {
+        "id": 1
+      }
+    ]
+  },
+  {
+    "hypertext": "building-an-api-in-go",
+    "title": "Building an API in Go",
+    "summary": "Step-by-step guide to building RESTful APIs in Go.",
+    "headerImage": "https://example.com/images/go-api.png",
+    "viewCount": 0,
+    "allowComments": true,
+    "active": true,
+    "tags": [
+      {
+        "id": 1
+      }
+    ]
+  },
+  {
+    "hypertext": "my-journey-as-a-developer",
+    "title": "My Journey as a Developer",
+    "summary": "Reflections and milestones from my personal journey into software development.",
+    "headerImage": "https://example.com/images/dev-journey.png",
+    "viewCount": 0,
+    "allowComments": true,
+    "active": true,
+    "tags": [
+      {
+        "id": 2
+      },
+      {
+        "id": 3
+      }
+    ]
+  }
+]
